@@ -1,6 +1,7 @@
 import cors from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
+import { userRoutes } from "./routes/user/user_routes";
 
 const app = new Elysia()
 
@@ -40,7 +41,9 @@ const app = new Elysia()
   //* Swagger documentation
   .use(
     swagger({
+      provider: "scalar",
       path: "/swagger",
+      version: "0.0.1",
       documentation: {
         info: {
           title: "Global News Time Report Service",
@@ -67,12 +70,6 @@ const app = new Elysia()
             description: "Production server",
           },
         ],
-        tags: [
-          {
-            name: "App",
-            description: "This contains the application routes",
-          },
-        ],
       },
     })
   )
@@ -88,8 +85,8 @@ const app = new Elysia()
     })
   )
 
-  //* Head request
-  .head("/", () => new Response(null, { status: 200 }))
+  //* User routes
+  .use(userRoutes)
 
   //* Listen to port 3000
   .listen(process.env.PORT_APP || 3000);
