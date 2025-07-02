@@ -42,6 +42,7 @@ const app = new Elysia()
   .use(
     swagger({
       provider: "scalar",
+      theme: "dark",
       path: "/swagger",
       version: "0.0.1",
       documentation: {

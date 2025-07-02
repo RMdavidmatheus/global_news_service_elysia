@@ -2,6 +2,9 @@ import { DateTime } from "luxon";
 import { UserDBInterface } from "../../../models/users/db_interface/user_db_interface";
 import { UserModel } from "../../../models/users/user_model";
 import { LunchTimeModel } from "../../../models/lunch_time_model";
+import { LunchTimeBody } from "../../../models/users/body/lunch_time_body";
+import { UserShedule } from "../../../models/users/enum/user_enum";
+import * as bcrypt from "bcrypt";
 
 export class UserUtils {
   //* Method to map LunchTime response from database to LunchTime model
@@ -54,5 +57,58 @@ export class UserUtils {
   //* Method for map response from database to User model in single user
   static mapUserResponse(response: UserDBInterface): UserModel {
     return this.mapUserResponseArray([response])[0];
+  }
+
+  //* Method to calculate the elapsed time
+  private static calculateElapsedTime(initial: Date, final: Date): string {
+    const differenceMs = final.getTime() - initial.getTime();
+
+    const totalMinutes = Math.floor(differenceMs / 1000 / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    if (hours > 0 && minutes > 0) {
+      return `${hours} hour${hours > 1 ? "s" : ""} y ${minutes} minute${
+        minutes > 1 ? "s" : ""
+      }`;
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? "s" : ""}`;
+    } else {
+      return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+    }
+  }
+
+  //* Method to create a lunchTime object
+  static createLunchTimeObject(
+    body: LunchTimeBody,
+    initialTime: Date,
+    finalDate: Date
+  ): LunchTimeModel {
+    return {
+      is_lunching: body.is_lunching,
+      schedule_user: body.is_lunching
+        ? body.schedule_user
+        : UserShedule.NO_SCHEDULE,
+      initial_time: DateTime.fromJSDate(initialTime)
+        .setZone("America/Bogota")
+        .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      final_time: DateTime.fromJSDate(finalDate)
+        .setZone("America/Bogota")
+        .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      elapsed_time: body.is_lunching
+        ? this.calculateElapsedTime(initialTime, finalDate)
+        : "User is not lunching",
+    };
+  }
+
+  //* Method to capitalize the first letter of the every word
+  static capitalizeFirstLetter = (str: string) => {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  //* Method to hash password using bcypt
+  static async hashPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
   }
 }

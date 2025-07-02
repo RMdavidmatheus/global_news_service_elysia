@@ -1,10 +1,12 @@
-import { lunchTimeSchema } from './../../models/lunch_time_model';
+import { LunchTimeBody, lunchTimeBodySchema } from './../../models/users/body/lunch_time_body';
+import { lunchTimeSchema } from "./../../models/lunch_time_model";
 import Elysia, { t } from "elysia";
 import { prisma } from "../../context/db_config/db_service";
 import { UserController } from "../../controllers/users/user_controller";
 import { UserService } from "../../services/users/user_service";
 import { userSchema } from "../../models/users/user_model";
 import { randomUUIDv7 } from "bun";
+import { userBodySchema } from "../../models/users/body/user_body";
 
 //* Inject the database service
 const db = prisma;
@@ -159,7 +161,104 @@ export const userRoutes = new Elysia({ prefix: "/users" })
       },
     },
   })
+  //* Create user
+  .post("/", controller.createUser, {
+    body: userBodySchema,
+    detail: {
+      tags: ["Users"],
+      summary: "Create a user",
+      description: "This endpoint is used to create a user on database",
+      responses: {
+        201: {
+          description:
+            "This code is for success response, and return message with the user id created",
+          content: {
+            "application/json": {
+              example: {
+                message: `User created successfully with id ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        400: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "User not created",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  //* Update user
+  .put("/user", controller.updateUser, {
+    body: userBodySchema,
+    query: t.Object({
+      id: t.String({
+        description: "This is the id of the user on the database",
+        example: randomUUIDv7().toString(),
+      }),
+    }),
+    detail: {
+      tags: ["Users"],
+      summary: "Update a user",
+      description: "This endpoint is used to update a user on database",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return message with the user id updated",
+          content: {
+            "application/json": {
+              example: {
+                message: `User updated successfully with id ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        400: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "User not updated",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  //* Models
   .model({
     userSchema,
     lunchTimeSchema,
+    userBodySchema,
+    lunchTimeBodySchema,
   });
