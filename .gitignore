@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# env
+.env
+
+# prisma generated
+/generated
+
 # dependencies
 /node_modules
 /.pnp
@@ -40,3 +46,4 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
+/src/generated/prisma
