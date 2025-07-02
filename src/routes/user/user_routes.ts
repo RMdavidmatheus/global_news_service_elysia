@@ -1,4 +1,7 @@
-import { LunchTimeBody, lunchTimeBodySchema } from './../../models/users/body/lunch_time_body';
+import {
+  LunchTimeBody,
+  lunchTimeBodySchema,
+} from "./../../models/users/body/lunch_time_body";
 import { lunchTimeSchema } from "./../../models/lunch_time_model";
 import Elysia, { t } from "elysia";
 import { prisma } from "../../context/db_config/db_service";
@@ -237,6 +240,105 @@ export const userRoutes = new Elysia({ prefix: "/users" })
             "application/json": {
               example: {
                 message: "User not updated",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  //* Patch lunch time
+  .patch("/lunch-time", controller.updateLunchTime, {
+    body: lunchTimeBodySchema,
+    query: t.Object({
+      id: t.String({
+        description: "This is the id of the user on the database",
+        example: randomUUIDv7().toString(),
+      }),
+    }),
+    detail: {
+      tags: ["Users"],
+      summary: "Update lunch time",
+      description:
+        "This endpoint is used to update lunch time of a user on database",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return message with the user id updated",
+          content: {
+            "application/json": {
+              example: {
+                message: `Lunch time updated successfully on user with id ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        400: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: `Lunch time not updated on user with id ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  .delete("/user", controller.deleteUser, {
+    query: t.Object({
+      id: t.String({
+        description: "This is the id of the user on the database",
+        example: randomUUIDv7().toString(),
+      }),
+    }),
+    detail: {
+      tags: ["Users"],
+      summary: "Delete a user",
+      description: "This endpoint is used to delete a user on database",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return message with the user id deleted",
+          content: {
+            "application/json": {
+              example: {
+                message: `User deleted successfully with id ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        400: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: `User not deleted with id ${randomUUIDv7().toString()}`,
               },
             },
           },

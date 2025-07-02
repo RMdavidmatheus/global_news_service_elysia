@@ -3,6 +3,7 @@ import { MessageApi } from "../../context/messages/message_api";
 import { UserModel } from "../../models/users/user_model";
 import { UserService } from "../../services/users/user_service";
 import { UserBody } from "../../models/users/body/user_body";
+import { LunchTimeBody } from "../../models/users/body/lunch_time_body";
 
 export class UserController {
   //* Inject the user service
@@ -100,6 +101,58 @@ export class UserController {
       return { message: `User updated successfully with id ${response.id}` };
     } catch (error) {
       console.error(`❌ Error updating user ${error}`);
+      set.status = 500;
+      throw error;
+    }
+  };
+
+  //* Update lunch time
+  updateLunchTime = async ({
+    set,
+    body,
+    query,
+  }: Pick<Context, "set" | "body" | "query">): Promise<
+    UserModel | MessageApi
+  > => {
+    try {
+      const response: UserModel = await this.service.updateLunchTime(
+        query.id,
+        body as LunchTimeBody
+      );
+
+      if (!response || Object.keys(response).length === 0) {
+        set.status = 400;
+        return { message: `Lunch time not updated on user with id ${query.id}` };
+      }
+
+      set.status = 200;
+      return {
+        message: `Lunch time updated successfully on user with id ${response.id}`,
+      };
+    } catch (error) {
+      console.error(`❌ Error updating lunch time ${error}`);
+      set.status = 500;
+      throw error;
+    }
+  };
+
+  //* Delete user
+  deleteUser = async ({
+    set,
+    query,
+  }: Pick<Context, "set" | "query">): Promise<UserModel | MessageApi> => {
+    try {
+      const response: UserModel = await this.service.deleteUser(query.id);
+
+      if (!response || Object.keys(response).length === 0) {
+        set.status = 400;
+        return { message: `User not deleted with id ${query.id}` };
+      }
+
+      set.status = 200;
+      return { message: `User deleted successfully with id ${response.id}` };
+    } catch (error) {
+      console.error(`❌ Error deleting user ${error}`);
       set.status = 500;
       throw error;
     }
