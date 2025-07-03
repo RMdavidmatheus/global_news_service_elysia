@@ -42,7 +42,7 @@ export class TaskUtils {
 
     return {
       task_name: this.capitalizeFirstLetter(body.task_name),
-      task_client: this.capitalizeFirstLetter(body.task_client),
+      task_client: body.task_client.toUpperCase(),
       task_initial_time: DateTime.fromJSDate(initialTime)
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
@@ -57,7 +57,7 @@ export class TaskUtils {
   static mapTaskJsonResponse(task: TaskJsonModel): TaskJsonModel {
     return {
       task_name: this.capitalizeFirstLetter(task.task_name),
-      task_client: this.capitalizeFirstLetter(task.task_client),
+      task_client: task.task_client.toUpperCase(),
       task_initial_time: DateTime.fromISO(task.task_initial_time, {
         zone: "utc",
       })

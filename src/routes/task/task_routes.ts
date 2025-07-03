@@ -1,3 +1,4 @@
+import { TaskJsonSchema } from './../../models/tasks/task_json_model';
 import Elysia, { t } from "elysia";
 import { prisma } from "../../context/db_config/db_service";
 import { TaskController } from "../../controllers/tasks/task_controller";
@@ -29,7 +30,7 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
             "This code is for success response, and return the list of tasks on database",
           content: {
             "application/json": {
-              schema: t.Array(TaskSchema),
+              schema: TaskSchema,
               example: [
                 {
                   id: randomUUIDv7().toString(),
@@ -157,7 +158,7 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
       responses: {
         201: {
           description:
-            "This code is for created response, and return the task created on database",
+            "This code is for created response, and return the task id created on database",
           content: {
             "application/json": {
               example: {
@@ -190,4 +191,10 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
         },
       },
     },
+  })
+  //* Models
+  .model({
+    TaskSchema,
+    TaskBodySchema,
+    TaskJsonSchema,
   });

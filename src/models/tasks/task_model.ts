@@ -8,7 +8,7 @@ export const TaskSchema = t.Object({
         description: "This is the id of the task",
         example: randomUUIDv7().toString()
     }),
-    details: t.Object(TaskJsonSchema),
+    details: TaskJsonSchema,
     is_active: t.Boolean({
         description: "This is the active status of the task",
         example: true

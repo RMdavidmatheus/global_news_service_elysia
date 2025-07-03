@@ -22,7 +22,7 @@ export const TaskJsonSchema = t.Object({
         description: "This is the elapsed time of the task",
         example: "1 Hour"
     }),
-}, { title: "Task data model", description: "This is the schema of the task in json format when is returned" })
+}, { title: "Task json model", description: "This is the schema of the task in json format when is returned" })
 
 //* Task json model
 export type TaskJsonModel = Static<typeof TaskJsonSchema>;
