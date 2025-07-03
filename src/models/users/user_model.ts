@@ -1,10 +1,10 @@
 import { randomUUIDv7 } from "bun";
 import { t } from "elysia";
 import { Static } from "elysia";
-import { lunchTimeSchema } from "../lunch_time_model";
+import { LunchTimeSchema } from "./lunch_time_model";
 
 //* User schema
-export const userSchema = t.Object(
+export const UserSchema = t.Object(
   {
     id: t.String({
         description: "This is the id of the user on the database",
@@ -26,7 +26,7 @@ export const userSchema = t.Object(
         description: "This is the password of the user",
         example: "$2b$10$CI1iMcHD4HiZYW1r0QoDsOJnZmy3GY4yyCHtPnPaSQMyPAoWG4Opy",
     }),
-    lunch_time: t.Optional(lunchTimeSchema),
+    lunch_time: t.Optional(LunchTimeSchema),
     is_active: t.Boolean({
         description: "This is the active status of the user",
         example: true,
@@ -48,4 +48,4 @@ export const userSchema = t.Object(
 );
 
 //* User model
-export type UserModel = Static<typeof userSchema>;
+export type UserModel = Static<typeof UserSchema>;

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import { UserDBInterface } from "../../../models/users/db_interface/user_db_interface";
+import { UserDbInterface } from "../../../models/users/db_interface/user_db_interface";
 import { UserModel } from "../../../models/users/user_model";
-import { LunchTimeModel } from "../../../models/lunch_time_model";
+import { LunchTimeModel } from "../../../models/users/lunch_time_model";
 import { LunchTimeBody } from "../../../models/users/body/lunch_time_body";
 import { UserShedule } from "../../../models/users/enum/user_enum";
 import * as bcrypt from "bcrypt";
@@ -23,10 +23,10 @@ export class UserUtils {
   }
 
   //* Method for map response from database to User model in list
-  static mapUserResponseArray(response: UserDBInterface[]): UserModel[] {
+  static mapUserResponseArray(response: UserDbInterface[]): UserModel[] {
     if (!response) return [];
 
-    const mapItem = (item: UserDBInterface): UserModel => ({
+    const mapItem = (item: UserDbInterface): UserModel => ({
       id: item.id,
       admin: item.admin,
       user_name: item.username,
@@ -55,7 +55,7 @@ export class UserUtils {
   }
 
   //* Method for map response from database to User model in single user
-  static mapUserResponse(response: UserDBInterface): UserModel {
+  static mapUserResponse(response: UserDbInterface): UserModel {
     return this.mapUserResponseArray([response])[0];
   }
 
@@ -103,7 +103,9 @@ export class UserUtils {
 
   //* Method to capitalize the first letter of the every word
   static capitalizeFirstLetter = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    if (!str) return str;
+    const lower = str.toLocaleLowerCase("es-ES");
+    return lower[0].toLocaleUpperCase("es-ES") + lower.slice(1);
   };
 
   //* Method to hash password using bcypt

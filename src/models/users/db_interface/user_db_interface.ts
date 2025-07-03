@@ -1,6 +1,6 @@
 import { JsonValue } from "@prisma/client/runtime/library";
 
-export interface UserDBInterface {
+export interface UserDbInterface {
   id: string;
   admin: boolean;
   username: string;
