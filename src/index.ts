@@ -2,6 +2,7 @@ import cors from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { userRoutes } from "./routes/user/user_routes";
+import { taskRoutes } from "./routes/task/task_routes";
 
 const app = new Elysia()
 
@@ -88,6 +89,7 @@ const app = new Elysia()
 
   //* User routes
   .use(userRoutes)
+  .use(taskRoutes)
 
   //* Listen to port 3000
   .listen(process.env.PORT_APP || 3000);

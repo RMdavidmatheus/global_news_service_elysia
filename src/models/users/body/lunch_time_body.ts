@@ -1,7 +1,7 @@
 import { Static, t } from "elysia";
 
 //* Lunch time body
-export const lunchTimeBodySchema = t.Object(
+export const LunchTimeBodySchema = t.Object(
   {
     is_lunching: t.Boolean({
       description: "This is the lunching status of the user",
@@ -20,4 +20,4 @@ export const lunchTimeBodySchema = t.Object(
 );
 
 //* Export the lunch time body
-export type LunchTimeBody = Static<typeof lunchTimeBodySchema>;
+export type LunchTimeBody = Static<typeof LunchTimeBodySchema>;

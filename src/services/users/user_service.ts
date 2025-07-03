@@ -1,6 +1,5 @@
 import { InputJsonValue } from "../../../generated/prisma/runtime/library";
 import { prisma } from "../../context/db_config/db_service";
-import { LunchTimeModel } from "../../models/lunch_time_model";
 import { LunchTimeBody } from "../../models/users/body/lunch_time_body";
 import { UserBody } from "../../models/users/body/user_body";
 import { UserShedule } from "../../models/users/enum/user_enum";
@@ -39,7 +38,10 @@ export class UserService {
         where: { id, isActive: true },
       });
 
-      if (!response) return {} as UserModel;
+      if (!response || !response.id) {
+        console.error(`❌ User not found`);
+        return {} as UserModel;
+      }
 
       return UserUtils.mapUserResponse(response);
     } catch (error) {

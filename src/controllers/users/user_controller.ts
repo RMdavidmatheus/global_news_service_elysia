@@ -38,8 +38,8 @@ export class UserController {
     try {
       const response: UserModel = await this.service.getUserById(query.id);
 
-      if (!response) {
-        set.status = 204;
+      if (!response || !response.id) {
+        set.status = 404;
         return { message: `User not found with id ${query.id}` };
       }
 

@@ -2,7 +2,7 @@ import { Type as t } from "@sinclair/typebox";
 import { Static } from "elysia";
 
 //* Lunch time schema
-export const lunchTimeSchema = t.Object(
+export const LunchTimeSchema = t.Object(
   {
     is_lunching: t.Boolean({
         description: "This is the lunching status of the user",
@@ -29,4 +29,4 @@ export const lunchTimeSchema = t.Object(
 );
 
 //* Lunch time model
-export type LunchTimeModel = Static<typeof lunchTimeSchema>;
+export type LunchTimeModel = Static<typeof LunchTimeSchema>;

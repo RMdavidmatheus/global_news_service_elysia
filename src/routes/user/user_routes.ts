@@ -1,15 +1,12 @@
-import {
-  LunchTimeBody,
-  lunchTimeBodySchema,
-} from "./../../models/users/body/lunch_time_body";
-import { lunchTimeSchema } from "./../../models/lunch_time_model";
+import { LunchTimeBodySchema } from "./../../models/users/body/lunch_time_body";
+import { LunchTimeSchema } from "../../models/users/lunch_time_model";
 import Elysia, { t } from "elysia";
 import { prisma } from "../../context/db_config/db_service";
 import { UserController } from "../../controllers/users/user_controller";
 import { UserService } from "../../services/users/user_service";
-import { userSchema } from "../../models/users/user_model";
+import { UserSchema } from "../../models/users/user_model";
 import { randomUUIDv7 } from "bun";
-import { userBodySchema } from "../../models/users/body/user_body";
+import { UserBodySchema } from "../../models/users/body/user_body";
 
 //* Inject the database service
 const db = prisma;
@@ -34,7 +31,7 @@ export const userRoutes = new Elysia({ prefix: "/users" })
             "This code is for success response, and return the list of users on database",
           content: {
             "application/json": {
-              schema: t.Array(userSchema),
+              schema: t.Array(UserSchema),
               example: [
                 {
                   id: randomUUIDv7().toString(),
@@ -118,7 +115,7 @@ export const userRoutes = new Elysia({ prefix: "/users" })
             "This code is for success response, and return the user on database",
           content: {
             "application/json": {
-              schema: userSchema,
+              schema: UserSchema,
               example: {
                 id: randomUUIDv7().toString(),
                 admin: true,
@@ -166,7 +163,7 @@ export const userRoutes = new Elysia({ prefix: "/users" })
   })
   //* Create user
   .post("/", controller.createUser, {
-    body: userBodySchema,
+    body: UserBodySchema,
     detail: {
       tags: ["Users"],
       summary: "Create a user",
@@ -210,7 +207,7 @@ export const userRoutes = new Elysia({ prefix: "/users" })
   })
   //* Update user
   .put("/user", controller.updateUser, {
-    body: userBodySchema,
+    body: UserBodySchema,
     query: t.Object({
       id: t.String({
         description: "This is the id of the user on the database",
@@ -260,7 +257,7 @@ export const userRoutes = new Elysia({ prefix: "/users" })
   })
   //* Patch lunch time
   .patch("/lunch-time", controller.updateLunchTime, {
-    body: lunchTimeBodySchema,
+    body: LunchTimeBodySchema,
     query: t.Object({
       id: t.String({
         description: "This is the id of the user on the database",
@@ -359,8 +356,8 @@ export const userRoutes = new Elysia({ prefix: "/users" })
   })
   //* Models
   .model({
-    userSchema,
-    lunchTimeSchema,
-    userBodySchema,
-    lunchTimeBodySchema,
+    UserSchema,
+    LunchTimeSchema,
+    UserBodySchema,
+    LunchTimeBodySchema,
   });
