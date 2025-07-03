@@ -1,4 +1,4 @@
-import { TaskJsonSchema } from './../../models/tasks/task_json_model';
+import { TaskJsonSchema } from "./../../models/tasks/task_json_model";
 import Elysia, { t } from "elysia";
 import { prisma } from "../../context/db_config/db_service";
 import { TaskController } from "../../controllers/tasks/task_controller";
@@ -117,7 +117,7 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
             },
           },
         },
-        404: {
+        204: {
           description:
             "This code is for not found response, and return a message that the task was not found",
           content: {
@@ -183,6 +183,113 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
             "This code is for internal server error response, and return a message that the server is not working",
           content: {
             "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  //* Update a task
+  .put("/task", controller.updateTask, {
+    body: TaskBodySchema,
+    query: t.Object({
+      id: t.String({
+        description: "This is the id of the task",
+        example: randomUUIDv7().toString(),
+      }),
+    }),
+    detail: {
+      tags: ["Tasks"],
+      summary: "Update a task",
+      description: "This endpoint is used to update a task on database",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return the task updated on database",
+          content: {
+            "application/json": {
+              example: {
+                message: `Task updated successfully with id: ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        204: {
+          description:
+            "This code is for not found response, and return a message that the task was not found",
+          content: {
+            "application/json": {
+              schema: t.Object({
+                message: t.String(),
+              }),
+              example: {
+                message: "Task not found",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for internal server error response, and return a message that the server is not working",
+          content: {
+            "application/json": {
+              schema: t.Object({
+                message: t.String(),
+              }),
+            },
+          },
+        },
+      },
+    },
+  })
+  .delete("/task", controller.deleteTask, {
+    query: t.Object({
+      id: t.String({
+        description: "This is the id of the task",
+        example: randomUUIDv7().toString(),
+      }),
+    }),
+    detail: {
+      tags: ["Tasks"],
+      summary: "Delete a task",
+      description: "This endpoint is used to delete a task on database",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return the task deleted on database",
+          content: {
+            "application/json": {
+              example: {
+                message: `Task deleted successfully with id: ${randomUUIDv7().toString()}`,
+              },
+            },
+          },
+        },
+        204: {
+          description:
+            "This code is for not found response, and return a message that the task was not found",
+          content: {
+            "application/json": {
+              schema: t.Object({
+                message: t.String(),
+              }),
+              example: {
+                message: "Task not found",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for internal server error response, and return a message that the server is not working",
+          content: {
+            "application/json": {
+              schema: t.Object({
+                message: t.String(),
+              }),
               example: {
                 message: "Internal server error",
               },

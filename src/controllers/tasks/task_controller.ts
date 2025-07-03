@@ -42,9 +42,9 @@ export class TaskController {
       const response: TaskModel = await this.service.getTaskById(query.id);
 
       if (!response || !response.id) {
-        set.status = 404;
+        set.status = 204;
         return {
-          message: "Task not found",
+          message: `Task not found with id ${query.id}`,
         };
       }
 
@@ -82,6 +82,68 @@ export class TaskController {
       };
     } catch (error) {
       console.error(`❌ Error creating task: ${error}`);
+      set.status = 500;
+      return {
+        message: "Internal server error",
+      };
+    }
+  };
+
+  //* Update a task
+  updateTask = async ({
+    set,
+    body,
+    query,
+  }: Pick<Context, "set" | "body" | "query">): Promise<
+    TaskModel | MessageApi
+  > => {
+    try {
+      const response: TaskModel = await this.service.updateTask(
+        query.id,
+        body as TaskBody
+      );
+
+      if (!response || !response.id) {
+        set.status = 204;
+        return {
+          message: `Task not found with id ${query.id}`,
+        };
+      }
+
+      set.status = 200;
+      return {
+        message: `Task updated successfully with id: ${response.id}`,
+      };
+    } catch (error) {
+      console.error(`❌ Error updating task: ${error}`);
+      set.status = 500;
+      return {
+        message: "Internal server error",
+      };
+    }
+  };
+
+  //* Delete a task
+  deleteTask = async ({
+    set,
+    query,
+  }: Pick<Context, "set" | "query">): Promise<TaskModel | MessageApi> => {
+    try {
+      const response: TaskModel = await this.service.deleteTask(query.id);
+
+      if (!response || !response.id) {
+        set.status = 204;
+        return {
+          message: `Task not found with id ${query.id}`,
+        };
+      }
+
+      set.status = 200;
+      return {
+        message: `Task deleted successfully with id: ${response.id}`,
+      };
+    } catch (error) {
+      console.error(`❌ Error deleting task: ${error}`);
       set.status = 500;
       return {
         message: "Internal server error",

@@ -65,4 +65,47 @@ export class TaskService {
       throw error;
     }
   }
+
+  //* Update a task
+  async updateTask(id: string, body: TaskBody): Promise<TaskModel> {
+    try {
+      const response = await this.db.task.update({
+        where: { id: id, isActive: true },
+        data: {
+          task: TaskUtils.createTaskJsonObject(body, new Date()),
+          updatedAt: new Date(),
+        },
+      });
+
+      if (!response || !response.id) {
+        console.error(`❌ Error updating task`);
+        return {} as TaskModel;
+      }
+
+      return TaskUtils.mapTaskResponse(response);
+    } catch (error) {
+      console.error(`❌ Error updating task: ${error}`);
+      throw error;
+    }
+  }
+
+  //* Delete a task
+  async deleteTask(id: string): Promise<TaskModel> {
+    try {
+      const response = await this.db.task.update({
+        where: { id: id, isActive: true },
+        data: { isActive: false, deletedAt: new Date() },
+      });
+
+      if (!response || !response.id) {
+        console.error(`❌ Error deleting task`);
+        return {} as TaskModel;
+      }
+
+      return TaskUtils.mapTaskResponse(response);
+    } catch (error) {
+      console.error(`❌ Error deleting task: ${error}`);
+      throw error;
+    }
+  }
 }
