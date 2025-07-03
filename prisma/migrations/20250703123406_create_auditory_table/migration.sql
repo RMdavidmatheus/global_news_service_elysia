@@ -3,10 +3,11 @@ CREATE TABLE "auditory" (
     "id" TEXT NOT NULL,
     "id_user" TEXT NOT NULL,
     "id_task" TEXT NOT NULL,
-    "status" BOOLEAN NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3),
-    "deletedAt" TIMESTAMP(3),
+    "status" BOOLEAN NOT NULL DEFAULT true,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "auditory_pkey" PRIMARY KEY ("id")
 );
