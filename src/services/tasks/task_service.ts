@@ -50,7 +50,7 @@ export class TaskService {
     try {
       const response = await this.db.task.create({
         data: {
-          task: TaskUtils.createTaskJsonObject(body, new Date()),
+          details: TaskUtils.createTaskJsonObject(body, new Date()),
         },
       });
 
@@ -72,7 +72,7 @@ export class TaskService {
       const response = await this.db.task.update({
         where: { id: id, isActive: true },
         data: {
-          task: TaskUtils.createTaskJsonObject(body, new Date()),
+          details: TaskUtils.createTaskJsonObject(body, new Date()),
           updatedAt: new Date(),
         },
       });

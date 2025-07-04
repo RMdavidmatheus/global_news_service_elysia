@@ -31,7 +31,7 @@ model users {
 
 model task {
   id        String    @id @default(uuid())
-  task      Json
+  details   Json
   isActive  Boolean   @default(true) @map("is_active")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
@@ -51,5 +51,5 @@ model auditory {
   deletedAt DateTime? @map("deleted_at")
 
   user users @relation(fields: [idUser], references: [id])
-  task task @relation(fields: [idTask], references: [id])
+  task task  @relation(fields: [idTask], references: [id])
 }
