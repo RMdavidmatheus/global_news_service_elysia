@@ -5,6 +5,7 @@ import { TaskModel } from "../../../models/tasks/task_model";
 import { TaskRelationModel } from "../../../models/auditory/task_relation_model/task_relation_model";
 import { TaskJsonModel } from "../../../models/tasks/task_json_model";
 import { UserDbInterface } from "../../../models/users/db_interface/user_db_interface";
+import { AuditoryDbInterface } from "../../../models/auditory/db_interface/auditory_db_interface";
 
 export class AuditoryUtils {
 
@@ -50,13 +51,13 @@ export class AuditoryUtils {
   }
 
   //* Method for map response from database to Auditory model in array
-  static mapAuditoryResponseArray(response: any[]): AuditoryModel[] {
+  static mapAuditoryResponseArray(response: AuditoryDbInterface[]): AuditoryModel[] {
     if (!response) return [];
 
-    const mapItem = (item: any): AuditoryModel => ({
+    const mapItem = (item: AuditoryDbInterface): AuditoryModel => ({
       id: item.id,
-      user: this.mapUserRelation(item.user),
-      task: this.mapTaskRelation(item.task),
+      user: this.mapUserRelation(item.user as unknown as UserDbInterface),
+      task: this.mapTaskRelation(item.task as unknown as TaskModel),
       status: item.status,
       is_active: item.isActive,
       created_at: DateTime.fromJSDate(new Date(item.createdAt))
@@ -75,5 +76,10 @@ export class AuditoryUtils {
     });
 
     return response.map(mapItem);
+  }
+
+  //* Method for map response from database to Auditory model
+  static mapAuditoryResponse(response: AuditoryDbInterface): AuditoryModel {
+    return this.mapAuditoryResponseArray([response])[0];
   }
 }

@@ -1,5 +1,5 @@
-import { TaskRelationModel } from "../task_relation_model/task_relation_model";
-import { UserRelationModel } from "../user_relation_model/user_relation_model";
+import { TaskDbInterface } from "../../tasks/db_interface/task_db_interface";
+import { UserDbInterface } from "../../users/db_interface/user_db_interface";
 
 //* Auditory db interface
 export interface AuditoryDbInterface {
@@ -11,6 +11,6 @@ export interface AuditoryDbInterface {
   createdAt: Date;
   updatedAt: Date | null;
   deletedAt: Date | null;
-  user: UserRelationModel;
-  task: TaskRelationModel;
+  user: UserDbInterface;
+  task: TaskDbInterface;
 }

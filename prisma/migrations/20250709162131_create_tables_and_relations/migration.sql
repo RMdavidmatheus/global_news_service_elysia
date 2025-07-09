@@ -44,9 +44,6 @@ CREATE TABLE "auditory" (
 CREATE UNIQUE INDEX "users_user_name_key" ON "users"("user_name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "auditory_id_user_key" ON "auditory"("id_user");
-
--- CreateIndex
 CREATE UNIQUE INDEX "auditory_id_task_key" ON "auditory"("id_task");
 
 -- AddForeignKey
