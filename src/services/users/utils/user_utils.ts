@@ -8,7 +8,7 @@ import * as bcrypt from "bcrypt";
 
 export class UserUtils {
   //* Method to map LunchTime response from database to LunchTime model
-  static mapLunchTimeResponse(lunchTime: LunchTimeModel): LunchTimeModel {
+  private static mapLunchTimeResponse(lunchTime: LunchTimeModel): LunchTimeModel {
     return {
       is_lunching: lunchTime.is_lunching,
       schedule_user: lunchTime.schedule_user,

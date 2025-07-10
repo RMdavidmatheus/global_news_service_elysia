@@ -6,7 +6,7 @@ import { TaskBody } from "../../../models/tasks/body/task_body";
 
 export class TaskUtils {
   //* Method to capitalize the first letter of the every word
-  static capitalizeFirstLetter = (str: string) => {
+  private static capitalizeFirstLetter = (str: string) => {
     if (!str) return str;
     const lower = str.toLocaleLowerCase("es-ES");
     return lower[0].toLocaleUpperCase("es-ES") + lower.slice(1);
@@ -54,7 +54,7 @@ export class TaskUtils {
   }
 
   //* Method to map Task response from database to TaskJsonModel
-  static mapTaskJsonResponse(task: TaskJsonModel): TaskJsonModel {
+  private static mapTaskJsonResponse(task: TaskJsonModel): TaskJsonModel {
     return {
       task_name: this.capitalizeFirstLetter(task.task_name),
       task_client: task.task_client.toUpperCase(),
@@ -76,8 +76,8 @@ export class TaskUtils {
 
     const mapItem = (item: TaskDbInterface): TaskModel => ({
       id: item.id,
-      details: item.task
-        ? this.mapTaskJsonResponse(item.task as unknown as TaskJsonModel)
+      details: item.details
+        ? this.mapTaskJsonResponse(item.details as unknown as TaskJsonModel)
         : ({} as any),
       is_active: item.isActive,
       created_at: DateTime.fromJSDate(new Date(item.createdAt))
