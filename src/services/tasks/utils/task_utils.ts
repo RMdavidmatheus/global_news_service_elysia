@@ -58,12 +58,10 @@ export class TaskUtils {
     return {
       task_name: this.capitalizeFirstLetter(task.task_name),
       task_client: task.task_client.toUpperCase(),
-      task_initial_time: DateTime.fromISO(task.task_initial_time, {
-        zone: "utc",
-      })
+      task_initial_time: DateTime.fromJSDate(new Date(task.task_initial_time))
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-      task_final_time: DateTime.fromISO(task.task_final_time, { zone: "utc" })
+      task_final_time: DateTime.fromJSDate(new Date(task.task_final_time))
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
       task_elapsed_time: this.capitalizeFirstLetter(task.task_elapsed_time),

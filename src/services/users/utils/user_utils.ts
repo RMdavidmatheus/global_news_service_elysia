@@ -15,10 +15,12 @@ export class UserUtils {
     return {
       is_lunching: lunchTime.is_lunching,
       schedule_user: lunchTime.schedule_user,
-      initial_time: DateTime.fromISO(lunchTime.initial_time, { zone: "utc" })
+      initial_time: DateTime.fromJSDate(new Date(lunchTime.initial_time))
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-      final_time: DateTime.fromISO(lunchTime.final_time, { zone: "utc" })
+      final_time: DateTime.fromJSDate(new Date(lunchTime.final_time), {
+        zone: "utc",
+      })
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
       elapsed_time: lunchTime.elapsed_time,
@@ -137,7 +139,10 @@ export class UserUtils {
   }
 
   //* Method to verify the password
-  static async verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  static async verifyPassword(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
 }
