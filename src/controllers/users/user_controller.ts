@@ -4,6 +4,7 @@ import { UserModel } from "../../models/users/user_model";
 import { UserService } from "../../services/users/user_service";
 import { UserBody } from "../../models/users/body/user_body";
 import { LunchTimeBody } from "../../models/users/body/lunch_time_body";
+import { LoginBody } from "../../models/users/body/login_body";
 
 export class UserController {
   //* Inject the user service
@@ -122,7 +123,9 @@ export class UserController {
 
       if (!response || Object.keys(response).length === 0) {
         set.status = 400;
-        return { message: `Lunch time not updated on user with id ${query.id}` };
+        return {
+          message: `Lunch time not updated on user with id ${query.id}`,
+        };
       }
 
       set.status = 200;
@@ -153,6 +156,60 @@ export class UserController {
       return { message: `User deleted successfully with id ${response.id}` };
     } catch (error) {
       console.error(`❌ Error deleting user ${error}`);
+      set.status = 500;
+      throw error;
+    }
+  };
+
+  //* Login user
+  loginUser = async ({
+    set,
+    body,
+    cookie: { auth_token },
+  }: Pick<Context, "set" | "body" | "cookie">): Promise<MessageApi> => {
+    try {
+      const response = await this.service.loginUser(body as LoginBody);
+
+      if (!response) {
+        set.status = 401;
+        return { message: "Credenciales inválidas" };
+      }
+
+      // Establecer la cookie con el token JWT
+      auth_token.set({
+        value: response,
+        httpOnly: true,
+        maxAge: 7200,
+        path: "/",
+      });
+
+      set.status = 200;
+      return {
+        message: "Inicio de sesión exitoso",
+      };
+    } catch (error) {
+      console.error(`❌ Error during login: ${error}`);
+      set.status = 500;
+      throw error;
+    }
+  };
+
+  //* Logout user
+  logoutUser = async ({
+    set,
+    cookie: { auth_token },
+  }: Pick<Context, "set" | "cookie">): Promise<MessageApi> => {
+    try {
+      if (auth_token.cookie.value) {
+        auth_token.remove();
+        set.status = 200;
+        return { message: "Cierre de sesión exitoso" };
+      }
+
+      set.status = 400;
+      return { message: "No se ha iniciado sesión" };
+    } catch (error) {
+      console.error(`❌ Error during logout: ${error}`);
       set.status = 500;
       throw error;
     }

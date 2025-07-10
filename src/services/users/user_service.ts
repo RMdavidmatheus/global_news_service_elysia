@@ -1,5 +1,6 @@
 import { InputJsonValue } from "../../../generated/prisma/runtime/library";
 import { prisma } from "../../context/db_config/db_service";
+import { LoginBody } from "../../models/users/body/login_body";
 import { LunchTimeBody } from "../../models/users/body/lunch_time_body";
 import { UserBody } from "../../models/users/body/user_body";
 import { UserShedule } from "../../models/users/enum/user_enum";
@@ -158,6 +159,39 @@ export class UserService {
       return UserUtils.mapUserResponse(response);
     } catch (error) {
       console.error(`❌ Error deleting user ${error}`);
+      throw error;
+    }
+  }
+
+  //* Login user
+  async loginUser(body: LoginBody): Promise<string | null> {
+    try {
+      const response = await this.db.users.findUnique({
+        where: {
+          username: body.user_name.toUpperCase(),
+          isActive: true,
+        },
+      });
+
+      if (!response) {
+        console.error(`❌ User not found with username ${body.user_name}`);
+        return null;
+      }
+
+      const isValidPassword = await UserUtils.verifyPassword(
+        body.password,
+        response.password
+      );
+
+      if (!isValidPassword) {
+        console.error(`❌ Invalid password for user ${body.user_name}`);
+        return null;
+      }
+
+      const token = UserUtils.generateJwtCookie(response.id, response.username);
+      return token;
+    } catch (error) {
+      console.error(`❌ Error during login: ${error}`);
       throw error;
     }
   }
