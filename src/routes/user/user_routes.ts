@@ -454,4 +454,5 @@ export const userRoutes = new Elysia({ prefix: "/users" })
     LunchTimeSchema,
     UserBodySchema,
     LunchTimeBodySchema,
+    LoginBodySchema,
   });
