@@ -172,7 +172,7 @@ export class UserController {
 
       if (!response) {
         set.status = 401;
-        return { message: "Credenciales inválidas" };
+        return { message: "Invalid credentials" };
       }
 
       // Establecer la cookie con el token JWT
@@ -185,7 +185,7 @@ export class UserController {
 
       set.status = 200;
       return {
-        message: "Inicio de sesión exitoso",
+        message: "Successfully logged in",
       };
     } catch (error) {
       console.error(`❌ Error during login: ${error}`);
@@ -203,11 +203,11 @@ export class UserController {
       if (auth_token.cookie.value) {
         auth_token.remove();
         set.status = 200;
-        return { message: "Cierre de sesión exitoso" };
+        return { message: "Successfully logged out" };
       }
 
       set.status = 400;
-      return { message: "No se ha iniciado sesión" };
+      return { message: "No session started" };
     } catch (error) {
       console.error(`❌ Error during logout: ${error}`);
       set.status = 500;

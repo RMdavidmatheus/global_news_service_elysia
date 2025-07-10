@@ -355,104 +355,10 @@ export const userRoutes = new Elysia({ prefix: "/users" })
       },
     },
   })
-  //* Login user
-  .post("/login", controller.loginUser, {
-    body: LoginBodySchema,
-    detail: {
-      tags: ["Users"],
-      summary: "Login user",
-      description: "This endpoint is used to login a user on database",
-      responses: {
-        200: {
-          description:
-            "This code is for success response, and return message with the user id logged",
-          headers: {
-            "Set-Cookie": {
-              description: "This is the cookie with the token",
-              example: "auth_token=token",
-            },
-          },
-          content: {
-            "application/json": {
-              example: {
-                message: "Login exitoso",
-              },
-            },
-          },
-        },
-        401: {
-          description:
-            "This code is for error response, and return the error message",
-          content: {
-            "application/json": {
-              example: {
-                message: "Credenciales inválidas",
-              },
-            },
-          },
-        },
-        500: {
-          description:
-            "This code is for error response, and return the error message",
-          content: {
-            "application/json": {
-              example: {
-                message: "Internal server error",
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  //* Logout user
-  .get("/logout", controller.logoutUser, {
-    detail: {
-      tags: ["Users"],
-      summary: "Logout user",
-      description: "This endpoint is used to logout a user on database",
-      responses: {
-        200: {
-          description:
-            "This code is for success response, and return message with the user id logged",
-          content: {
-            "application/json": {
-              example: {
-                message: "Cierre de sesión exitoso",
-              },
-            },
-          },
-        },
-        400: {
-          description:
-            "This code is for error response, and return the error message",
-          content: {
-            "application/json": {
-              example: {
-                message: "No se ha iniciado sesión",
-              },
-            },
-          },
-        },
-        500: {
-          description:
-            "This code is for error response, and return the error message",
-          content: {
-            "application/json": {
-              example: {
-                message: "Internal server error",
-              },
-            },
-          },
-        },
-      },
-    },
-  })
   //* Models
   .model({
     UserSchema,
     LunchTimeSchema,
     UserBodySchema,
     LunchTimeBodySchema,
-    LoginBodySchema,
   });
