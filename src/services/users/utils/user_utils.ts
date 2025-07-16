@@ -5,17 +5,22 @@ import { LunchTimeModel } from "../../../models/users/lunch_time_model";
 import { LunchTimeBody } from "../../../models/users/body/lunch_time_body";
 import { UserShedule } from "../../../models/users/enum/user_enum";
 import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
 
 export class UserUtils {
   //* Method to map LunchTime response from database to LunchTime model
-  private static mapLunchTimeResponse(lunchTime: LunchTimeModel): LunchTimeModel {
+  private static mapLunchTimeResponse(
+    lunchTime: LunchTimeModel
+  ): LunchTimeModel {
     return {
       is_lunching: lunchTime.is_lunching,
       schedule_user: lunchTime.schedule_user,
-      initial_time: DateTime.fromISO(lunchTime.initial_time, { zone: "utc" })
+      initial_time: DateTime.fromJSDate(new Date(lunchTime.initial_time))
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-      final_time: DateTime.fromISO(lunchTime.final_time, { zone: "utc" })
+      final_time: DateTime.fromJSDate(new Date(lunchTime.final_time), {
+        zone: "utc",
+      })
         .setZone("America/Bogota")
         .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
       elapsed_time: lunchTime.elapsed_time,
@@ -112,5 +117,32 @@ export class UserUtils {
   static async hashPassword(password: string): Promise<string> {
     const saltRounds = 10;
     return await bcrypt.hash(password, saltRounds);
+  }
+
+  //* Method to generate a cookie jwt
+  static generateJwtCookie(userId: string, username: string): string {
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 2);
+
+    const secretKey = process.env.JWT_SECRET as string;
+
+    const token = jwt.sign(
+      {
+        id: userId,
+        username: username,
+        exp: Math.floor(expirationTime.getTime() / 1000),
+      },
+      secretKey
+    );
+
+    return token;
+  }
+
+  //* Method to verify the password
+  static async verifyPassword(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
   }
 }

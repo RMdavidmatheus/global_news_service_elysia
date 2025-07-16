@@ -7,6 +7,7 @@ import { UserService } from "../../services/users/user_service";
 import { UserSchema } from "../../models/users/user_model";
 import { randomUUIDv7 } from "bun";
 import { UserBodySchema } from "../../models/users/body/user_body";
+import { LoginBodySchema } from "../../models/users/body/login_body";
 
 //* Inject the database service
 const db = prisma;

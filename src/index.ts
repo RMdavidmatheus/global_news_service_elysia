@@ -4,6 +4,8 @@ import { Elysia } from "elysia";
 import { userRoutes } from "./routes/user/user_routes";
 import { taskRoutes } from "./routes/task/task_routes";
 import { auditoryRoutes } from "./routes/auditory/auditory_routes";
+import { authRoutes } from "./routes/auth/auth_routes";
+import jwt from "@elysiajs/jwt";
 
 const app = new Elysia()
 
@@ -88,10 +90,17 @@ const app = new Elysia()
     })
   )
 
+  //* Jwt middleware
+  .use(jwt({
+    name: "auth_token",
+    secret: process.env.JWT_SECRET as string,
+  }))
+
   //* User routes
   .use(userRoutes)
   .use(taskRoutes)
   .use(auditoryRoutes)
+  .use(authRoutes)
 
   //* Listen to port 3000
   .listen(process.env.PORT_APP || 3000);
