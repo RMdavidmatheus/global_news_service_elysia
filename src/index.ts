@@ -82,8 +82,8 @@ const app = new Elysia()
   //* Cors middleware
   .use(
     cors({
-      origin: ["*"],
-      methods: ["GET", "POST", "PUT", "DELETE"],
+      origin: ["http://localhost:5173"],
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
       maxAge: 86400,
@@ -94,6 +94,7 @@ const app = new Elysia()
   .use(jwt({
     name: "auth_token",
     secret: process.env.JWT_SECRET as string,
+    exp: "4h"
   }))
 
   //* User routes

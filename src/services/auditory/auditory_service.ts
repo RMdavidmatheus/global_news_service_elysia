@@ -1,6 +1,7 @@
 import { prisma } from "../../context/db_config/db_service";
 import { AuditoryModel } from "../../models/auditory/auditory_model";
 import { AuditoryBody } from "../../models/auditory/body/auditory_body";
+import { StatusBody } from "../../models/auditory/body/status_body";
 import { AuditoryDbInterface } from "../../models/auditory/db_interface/auditory_db_interface";
 import { AuditoryUtils } from "./utils/auditory_utils";
 
@@ -12,7 +13,8 @@ export class AuditoryService {
   async getAllAuditory(): Promise<AuditoryModel[]> {
     try {
       const response = await this.db.auditory.findMany({
-        where: { isActive: true},
+        take: 6,
+        where: { isActive: true, status: true},
         include: {
           user: true,
           task: true,
@@ -83,25 +85,21 @@ export class AuditoryService {
   }
 
   //* Update auditory status to disable
-  async updateAuditoryStatus(id: string): Promise<AuditoryModel> {
+  async updateAuditoryStatus(body: string[]): Promise<number> {
     try {
-      const response = await this.db.auditory.update({
-        where: { id, isActive: true },
+      const response = await this.db.auditory.updateMany({
+        where: { id: { in: body }, isActive: true },
         data: { status: false, updatedAt: new Date() },
-        include: {
-          user: true,
-          task: true,
-        },
       });
 
-      if (!response || !response.id) {
-        console.error(`❌ Error updating auditory status: ${id}`);
-        return {} as AuditoryModel;
+      if (!response || response.count === 0) {
+        console.error(`❌ Error updating auditory status: ${body}`);
+        return 0;
       }
 
-      return AuditoryUtils.mapAuditoryResponse(response);
+      return response.count;
     } catch (error) {
-      console.error(`❌ Error updating auditory status: ${id}`);
+      console.error(`❌ Error updating auditory status: ${body}`);
       throw error;
     }
   }

@@ -6,6 +6,7 @@ import { TaskService } from "../../services/tasks/task_service";
 import { TaskSchema } from "../../models/tasks/task_model";
 import { randomUUIDv7 } from "bun";
 import { TaskBodySchema } from "../../models/tasks/body/task_body";
+import { StatusBodySchema } from "../../models/auditory/body/status_body";
 
 //* Inject the database service
 const db = prisma;
@@ -246,12 +247,7 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
     },
   })
   .delete("/task", controller.deleteTask, {
-    query: t.Object({
-      id: t.String({
-        description: "This is the id of the task",
-        example: randomUUIDv7().toString(),
-      }),
-    }),
+    body: StatusBodySchema,
     detail: {
       tags: ["Tasks"],
       summary: "Delete a task",
@@ -301,7 +297,8 @@ export const taskRoutes = new Elysia({ prefix: "/tasks" })
   })
   //* Models
   .model({
-    TaskSchema,
-    TaskBodySchema,
-    TaskJsonSchema,
+    model: TaskSchema,
+    body: TaskBodySchema,
+    model_task_details: TaskJsonSchema,
+    body_status: StatusBodySchema,
   });

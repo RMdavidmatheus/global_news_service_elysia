@@ -98,4 +98,49 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
         },
       },
     }
-  );
+  )
+  .get("/session", userController.decodeSession, {
+    detail: {
+      tags: ["Authentication"],
+      summary: "Decode session",
+      description: "Decode session and return the values",
+      responses: {
+        200: {
+          description:
+            "This code is for success response, and return the message",
+          content: {
+            "application/json": {
+              example: {
+                message:
+                  "Session decoded successfully taking the values: user_id: 1, username: test, full_name: Test User, admin: false",
+              },
+            },
+          },
+        },
+        401: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Invalid session",
+              },
+            },
+          },
+        },
+        500: {
+          description:
+            "This code is for error response, and return the error message",
+          content: {
+            "application/json": {
+              example: {
+                message: "Internal server error",
+              },
+            },
+          },
+        },
+      },
+    },
+  }).model({
+    body: LoginBodySchema,
+  });
