@@ -6,7 +6,7 @@ import { UserBody } from "../../models/users/body/user_body";
 import { UserShedule } from "../../models/users/enum/user_enum";
 import { UserModel } from "../../models/users/user_model";
 import { UserUtils } from "./utils/user_utils";
-
+import jwt, { JwtPayload } from "jsonwebtoken";
 export class UserService {
   //* Inject the database service
   constructor(private readonly db: typeof prisma) {}
@@ -192,6 +192,29 @@ export class UserService {
       return token;
     } catch (error) {
       console.error(`❌ Error during login: ${error}`);
+      throw error;
+    }
+  }
+
+  //* Session decode
+  async decodeSession(token: string): Promise<string | JwtPayload | null> {
+    try {
+
+      if (!token) {
+        console.error(`❌ No session active`);
+        return null;
+      }
+
+      const decoded = await jwt.verify(token, process.env.JWT_SECRET as string);
+
+      if (!decoded) {
+        console.error(`❌ Invalid session`);
+        return null;
+      }
+
+      return decoded;
+    } catch (error) {
+      console.error(`❌ Error decoding session: ${error}`);
       throw error;
     }
   }

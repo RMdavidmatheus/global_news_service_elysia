@@ -181,6 +181,7 @@ export class UserController {
         httpOnly: true,
         maxAge: 7200,
         path: "/",
+        sameSite: "lax",
       });
 
       set.status = 200;
@@ -210,6 +211,37 @@ export class UserController {
       return { message: "No session started" };
     } catch (error) {
       console.error(`❌ Error during logout: ${error}`);
+      set.status = 500;
+      throw error;
+    }
+  };
+
+  //* Decode session
+  decodeSession = async ({
+    set,
+    cookie: { auth_token },
+  }: Pick<Context, "set" | "cookie">): Promise<MessageApi> => {
+    try {
+      const response = await this.service.decodeSession(
+        auth_token.cookie.value as string
+      );
+
+      if (!response || typeof response === "string") {
+        set.status = 401;
+        return { message: "No session active" };
+      }
+
+      const values = {
+        user_id: response.id,
+        username: response.username,
+        full_name: response.fullName,
+        admin: response.admin,
+      }
+
+      set.status = 200;
+      return { message: `Session verified successfully, taking the values: admin: ${values.admin}, user_id: ${values.user_id}, username: ${values.username}, full_name: ${values.full_name}` };
+    } catch (error) {
+      console.error(`❌ Error decoding session: ${error}`);
       set.status = 500;
       throw error;
     }
