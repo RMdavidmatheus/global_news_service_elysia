@@ -3,6 +3,7 @@ import { Context } from "elysia";
 import { AuditoryService } from "../../services/auditory/auditory_service";
 import { AuditoryModel } from "../../models/auditory/auditory_model";
 import { AuditoryBody } from "../../models/auditory/body/auditory_body";
+import { StatusBody } from "../../models/auditory/body/status_body";
 
 export class AuditoryController {
   //* Inject the auditory service
@@ -94,26 +95,26 @@ export class AuditoryController {
   //* Update auditory status to disable
   updateAuditoryStatusToDisable = async ({
     set,
-    query,
-  }: Pick<Context, "set" | "query">): Promise<MessageApi> => {
+    body,
+  }: Pick<Context, "set" | "body">): Promise<MessageApi> => {
     try {
-      const response: AuditoryModel = await this.service.updateAuditoryStatus(
-        query.id
+      const response = await this.service.updateAuditoryStatus(
+        body as string[]
       );
 
-      if (!response || !response.id) {
+      if (!response || response === 0) {
         set.status = 400;
         return {
-          message: `Error updating auditory status with id: ${query.id}`,
+          message: `Error updating auditories status with ids: ${body}`,
         };
       }
 
       set.status = 200;
       return {
-        message: `Auditory status updated with id: ${response.id}`,
+        message: `Auditories status updated on ids: ${body}`,
       };
     } catch (error) {
-      console.error(`❌ Error updating auditory status: ${error}`);
+      console.error(`❌ Error updating auditories status: ${error}`);
       set.status = 500;
       return {
         message: "Internal server error",

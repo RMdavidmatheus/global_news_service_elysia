@@ -188,7 +188,7 @@ export class UserService {
         return null;
       }
 
-      const token = UserUtils.generateJwtCookie(response.id, response.username);
+      const token = UserUtils.generateJwtCookie(response.id, response.username, response.fullName, response.admin);
       return token;
     } catch (error) {
       console.error(`❌ Error during login: ${error}`);

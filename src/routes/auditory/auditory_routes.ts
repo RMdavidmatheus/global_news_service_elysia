@@ -5,6 +5,7 @@ import { AuditoryController } from "../../controllers/auditory/auditory_controll
 import { AuditorySchema } from "../../models/auditory/auditory_model";
 import { randomUUIDv7 } from "bun";
 import { AuditoryBodySchema } from "../../models/auditory/body/auditory_body";
+import { StatusBodySchema } from "../../models/auditory/body/status_body";
 
 //* Inject the database service
 const db = prisma;
@@ -200,12 +201,7 @@ export const auditoryRoutes = new Elysia({ prefix: "/auditories" })
   })
   //* Update auditory status
   .patch("/auditory/status", controller.updateAuditoryStatusToDisable, {
-    query: t.Object({
-      id: t.String({
-        description: "This is the id of the auditory",
-        example: randomUUIDv7().toString(),
-      }),
-    }),
+    body: StatusBodySchema,
     detail: {
       tags: ["Auditory"],
       summary: "Update auditory status to disable",
@@ -300,4 +296,5 @@ export const auditoryRoutes = new Elysia({ prefix: "/auditories" })
   .model({
     body: AuditoryBodySchema,
     model: AuditorySchema,
+    body_status: StatusBodySchema,
   });

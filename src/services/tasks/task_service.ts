@@ -90,19 +90,19 @@ export class TaskService {
   }
 
   //* Delete a task
-  async deleteTask(id: string): Promise<TaskModel> {
+  async deleteTask(body: string[]): Promise<number> {
     try {
-      const response = await this.db.task.update({
-        where: { id: id, isActive: true },
+      const response = await this.db.task.updateMany({
+        where: { id: { in: body }, isActive: true },
         data: { isActive: false, deletedAt: new Date() },
       });
 
-      if (!response || !response.id) {
+      if (!response || response.count === 0) {
         console.error(`❌ Error deleting task`);
-        return {} as TaskModel;
+        return 0;
       }
 
-      return TaskUtils.mapTaskResponse(response);
+      return response.count;
     } catch (error) {
       console.error(`❌ Error deleting task: ${error}`);
       throw error;

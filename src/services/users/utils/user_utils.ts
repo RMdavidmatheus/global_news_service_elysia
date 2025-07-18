@@ -120,7 +120,7 @@ export class UserUtils {
   }
 
   //* Method to generate a cookie jwt
-  static generateJwtCookie(userId: string, username: string): string {
+  static generateJwtCookie(userId: string, userName: string, userFullName: string, userAdmin: boolean): string {
     const expirationTime = new Date();
     expirationTime.setHours(expirationTime.getHours() + 2);
 
@@ -129,7 +129,9 @@ export class UserUtils {
     const token = jwt.sign(
       {
         id: userId,
-        username: username,
+        admin: userAdmin,
+        username: userName,
+        fullName: userFullName,
         exp: Math.floor(expirationTime.getTime() / 1000),
       },
       secretKey

@@ -1,5 +1,6 @@
 import { JsonValue } from "@prisma/client/runtime/library";
 
+//* UserDbInterface is the interface for the user table in the database
 export interface UserDbInterface {
   id: string;
   admin: boolean;

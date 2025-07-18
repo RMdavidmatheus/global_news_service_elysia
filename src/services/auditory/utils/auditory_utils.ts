@@ -8,7 +8,6 @@ import { UserDbInterface } from "../../../models/users/db_interface/user_db_inte
 import { AuditoryDbInterface } from "../../../models/auditory/db_interface/auditory_db_interface";
 
 export class AuditoryUtils {
-
   //* Method to capitalize the first letter of the every word
   private static capitalizeFirstLetter = (str: string) => {
     if (!str) return str;
@@ -19,18 +18,16 @@ export class AuditoryUtils {
   //* Method to map task details to TaskJsonModel
   private static mapTaskDetails(task: TaskJsonModel): TaskJsonModel {
     return {
-        task_name: this.capitalizeFirstLetter(task.task_name),
-        task_client: task.task_client.toUpperCase(),
-        task_initial_time: DateTime.fromISO(task.task_initial_time, {
-          zone: "utc",
-        })
-          .setZone("America/Bogota")
-          .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-        task_final_time: DateTime.fromISO(task.task_final_time, { zone: "utc" })
-          .setZone("America/Bogota")
-          .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-        task_elapsed_time: this.capitalizeFirstLetter(task.task_elapsed_time),
-      } as TaskJsonModel;
+      task_name: this.capitalizeFirstLetter(task.task_name),
+      task_client: task.task_client.toUpperCase(),
+      task_initial_time: DateTime.fromJSDate(new Date(task.task_initial_time))
+        .setZone("America/Bogota")
+        .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      task_final_time: DateTime.fromJSDate(new Date(task.task_final_time))
+        .setZone("America/Bogota")
+        .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      task_elapsed_time: this.capitalizeFirstLetter(task.task_elapsed_time),
+    } as TaskJsonModel;
   }
 
   //* Method to map task relation to TaskRelationModel
@@ -51,7 +48,9 @@ export class AuditoryUtils {
   }
 
   //* Method for map response from database to Auditory model in array
-  static mapAuditoryResponseArray(response: AuditoryDbInterface[]): AuditoryModel[] {
+  static mapAuditoryResponseArray(
+    response: AuditoryDbInterface[]
+  ): AuditoryModel[] {
     if (!response) return [];
 
     const mapItem = (item: AuditoryDbInterface): AuditoryModel => ({

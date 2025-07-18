@@ -1,3 +1,4 @@
+import { StatusBody } from './../../models/auditory/body/status_body';
 import { Context } from "elysia";
 import { MessageApi } from "../../context/messages/message_api";
 import { TaskModel } from "../../models/tasks/task_model";
@@ -126,21 +127,21 @@ export class TaskController {
   //* Delete a task
   deleteTask = async ({
     set,
-    query,
-  }: Pick<Context, "set" | "query">): Promise<TaskModel | MessageApi> => {
+    body,
+  }: Pick<Context, "set" | "body">): Promise<MessageApi> => {
     try {
-      const response: TaskModel = await this.service.deleteTask(query.id);
+      const response: number = await this.service.deleteTask(body as string[]);
 
-      if (!response || !response.id) {
+      if (!response || response === 0) {
         set.status = 204;
         return {
-          message: `Task not found with id ${query.id}`,
+          message: `Error deleting tasks with ids: ${body}`,
         };
       }
 
       set.status = 200;
       return {
-        message: `Task deleted successfully with id: ${response.id}`,
+        message: `Tasks deleted successfully with ids: ${body}`,
       };
     } catch (error) {
       console.error(`❌ Error deleting task: ${error}`);

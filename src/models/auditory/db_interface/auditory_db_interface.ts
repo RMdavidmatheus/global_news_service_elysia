@@ -1,7 +1,7 @@
 import { TaskDbInterface } from "../../tasks/db_interface/task_db_interface";
 import { UserDbInterface } from "../../users/db_interface/user_db_interface";
 
-//* Auditory db interface
+//* Auditory db interface is the interface for the auditory table in the database
 export interface AuditoryDbInterface {
   id: string;
   idUser: string;
