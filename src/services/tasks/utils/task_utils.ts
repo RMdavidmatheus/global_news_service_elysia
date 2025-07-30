@@ -21,13 +21,13 @@ export class TaskUtils {
     const minutes = totalMinutes % 60;
 
     if (hours > 0 && minutes > 0) {
-      return `${hours} hour${hours > 1 ? "s" : ""} y ${minutes} minute${
+      return `${hours} hora${hours > 1 ? "s" : ""} y ${minutes} minuto${
         minutes > 1 ? "s" : ""
       }`;
     } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? "s" : ""}`;
+      return `${hours} hora${hours > 1 ? "s" : ""}`;
     } else {
-      return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+      return `${minutes} minuto${minutes > 1 ? "s" : ""}`;
     }
   }
 
